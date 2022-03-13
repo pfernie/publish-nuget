@@ -1,5 +1,8 @@
 name: Nuget Package And Upload
 description: "Nuget Package And Upload GitHub Action"
+branding:
+  icon: 'code'  
+  color: 'gray-dark'
 inputs:
   releaseVersion: 
     description: "nuget package: version"
