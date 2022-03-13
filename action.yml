@@ -1,0 +1,78 @@
+name: Nuget Package And Upload
+description: "Nuget Package And Upload GitHub Action"
+inputs:
+  releaseVersion: 
+    description: "nuget package: version"
+    required: true
+  repoUrl: 
+    description: "nuget package: repository url"
+    required: true
+  nugetToken: 
+    description: "nuget token with publish permissions"
+    required: true
+  nugetSource: 
+    description: "nuget source, where to publish, default is 'https://api.nuget.org/v3/index.json'"
+    default: "https://api.nuget.org/v3/index.json"
+    required: false
+  publishRepositoryUrl: 
+    description: "nuget package: publishRepositoryUrl, default true"
+    default: "true"
+    required: false
+  publishRepositoryType: 
+    description: "nuget package: publishRepositoryType, default git"
+    default: "git"
+    required: false
+  embedUntrackedSources: 
+    description: "nuget package: embedUntrackedSources, default true"
+    default: "true"
+    required: false
+  includeSymbols: 
+    description: "nuget package: includeSymbols, default true"
+    default: "true"
+    required: false
+  symbolPackageFormat: 
+    description: "nuget package: symbolPackageFormat, default snupkg"
+    default: "snupkg"
+    required: false
+  deterministic: 
+    description: "nuget package: deterministic, default true"
+    default: "true"
+    required: false
+  continuousIntegrationBuild: 
+    description: "nuget package: continuousIntegrationBuild, default True"
+    default: "True"
+    required: false
+  sourceLinkPackage: 
+    description: "nuget package: sourceLink nuget to add to project, default 'Microsoft.SourceLink.GitHub'"
+    default: "Microsoft.SourceLink.GitHub"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Build & Packing
+      env:
+        releaseVersion: ${{ inputs.releaseVersion }}
+        repoUrl: ${{ inputs.repoUrl }}
+      run: |
+        echo "pack version $releaseVersion"
+        dotnet add package Microsoft.SourceLink.GitHub
+        dotnet restore
+        dotnet build -c Release 
+        dotnet pack -c Release \
+                    -o deploy \
+                    /p:PublishRepositoryUrl=${{ inputs.publishRepositoryUrl }} \
+                    /p:PublishRepositoryType=${{ inputs.publishRepositoryType }} \
+                    /p:EmbedUntrackedSources=${{ inputs.embedUntrackedSources }} \
+                    /p:IncludeSymbols=${{ inputs.includeSymbols }} \
+                    /p:SymbolPackageFormat=${{ inputs.symbolPackageFormat }} \
+                    /p:Deterministic=${{ inputs.deterministic }} \
+                    /p:ContinuousIntegrationBuild=${{ inputs.continuousIntegrationBuild }} \
+                    /p:Version="$releaseVersion" \
+                    /p:RepositoryUrl="$repoUrl"
+    - name: Publish Nuget Package
+      env: 
+        nugetToken: ${{ inputs.nugetToken }}
+        nugetSource: ${{ inputs.nugetSource }}
+      run: |
+        ls -l deploy
+        dotnet nuget push ./deploy/* --skip-duplicate -k $nugetToken --source $nugetSource --force-english-output
