@@ -1,5 +1,3 @@
-# publish-nuget
-
 # Example
 
 ```yml
