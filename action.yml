@@ -50,6 +50,7 @@ runs:
   using: "composite"
   steps:
     - name: Build & Packing
+      shell: bash
       env:
         releaseVersion: ${{ inputs.releaseVersion }}
         repoUrl: ${{ inputs.repoUrl }}
@@ -70,6 +71,7 @@ runs:
                     /p:Version="$releaseVersion" \
                     /p:RepositoryUrl="$repoUrl"
     - name: Publish Nuget Package
+      shell: bash
       env: 
         nugetToken: ${{ inputs.nugetToken }}
         nugetSource: ${{ inputs.nugetSource }}
