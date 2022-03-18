@@ -5,20 +5,19 @@ name: Nuget Package
 on:
   release:
     types: [published]
-
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Update NuGet package
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@main
 
       - name: Setup .Net
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@main
 
       - name: Nuget Package And Upload
-        uses: csharp-opensource/publish-nuget@v1
+        uses: csharp-opensource/publish-nuget@master
         with:
           releaseVersion: ${{ github.event.release.tag_name }}
           repoUrl: ${{ github.server_url }}/${{ github.repository }}
