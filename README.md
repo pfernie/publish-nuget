@@ -1,14 +1,14 @@
 # Example
 
 ```yml
-name: Nuget Package
+name: Nuget Publish
 on:
   release:
     types: [published]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Update NuGet package
+    name: NuGet Publish
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
