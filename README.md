@@ -21,6 +21,6 @@ jobs:
         with:
           releaseVersion: ${{ github.event.release.tag_name }}
           repoUrl: ${{ github.server_url }}/${{ github.repository }}
-          nugetToken: ${{secrets.NUGET_AUTH_TOKEN}}
+          nugetToken: ${{ secrets.NUGET_AUTH_TOKEN }}
           nugetSource: https://api.nuget.org/v3/index.json
 ```
