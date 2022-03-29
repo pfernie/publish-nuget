@@ -84,6 +84,6 @@ runs:
         nugetToken: ${{ inputs.nugetToken }}
         nugetSource: ${{ inputs.nugetSource }}
       run: |
-      cd "${{ inputs.path }}"
+        cd "${{ inputs.path }}"
         ls -l deploy
         dotnet nuget push ./deploy/* --skip-duplicate -k $nugetToken --source $nugetSource --force-english-output
