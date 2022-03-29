@@ -49,6 +49,10 @@ inputs:
     description: "nuget package: sourceLink nuget to add to project, default 'Microsoft.SourceLink.GitHub'"
     default: "Microsoft.SourceLink.GitHub"
     required: false
+  path:
+    description: "the build path to enter"
+    default: ""
+    required: false
 runs:
   using: "composite"
   steps:
@@ -59,6 +63,7 @@ runs:
         repoUrl: ${{ inputs.repoUrl }}
       run: |
         echo "pack version $releaseVersion"
+        cd "${{ inputs.path }}"
         dotnet add package Microsoft.SourceLink.GitHub
         dotnet restore
         dotnet build -c Release 
